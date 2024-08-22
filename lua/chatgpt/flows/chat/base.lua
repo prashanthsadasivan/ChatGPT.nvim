@@ -230,7 +230,7 @@ function Chat:addAnswerPartial(text, state)
 
     local lines = {}
     local nr_of_lines = 0
-    for line in string.gmatch(text, "[^\n]+") do
+    for line in string.gmatch(text, "[^\n]*") do
       nr_of_lines = nr_of_lines + 1
       table.insert(lines, line)
     end
