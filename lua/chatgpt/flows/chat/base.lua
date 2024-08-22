@@ -178,7 +178,7 @@ function Chat:_add(type, text, usage, idx)
 
   local lines = {}
   local nr_of_lines = 0
-  for line in string.gmatch(text, "[^\n]+") do
+  for line in text:gmatch("([^\n]*\n?)") do
     nr_of_lines = nr_of_lines + 1
     table.insert(lines, line)
   end
@@ -230,7 +230,7 @@ function Chat:addAnswerPartial(text, state)
 
     local lines = {}
     local nr_of_lines = 0
-    for line in string.gmatch(text, "[^\n]*") do
+    for line in text:gmatch("([^\n]*\n?)") do
       nr_of_lines = nr_of_lines + 1
       table.insert(lines, line)
     end
@@ -426,7 +426,7 @@ function Chat:renderLastMessage()
   local msg = self:getSelected()
 
   local lines = {}
-  for w in string.gmatch(msg.text, "[^\r\n]+") do
+  for w in msg.text:gmatch(msg.text, "([^\n]*\n?)") do
     table.insert(lines, w)
   end
   table.insert(lines, "")
