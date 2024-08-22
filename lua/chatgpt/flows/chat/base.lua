@@ -426,7 +426,7 @@ function Chat:renderLastMessage()
   local msg = self:getSelected()
 
   local lines = {}
-  for w in msg.text:gmatch("([^\n]*\n?)") do
+  for w in string.gmatch(msg.text, "[^\r\n]+") do
     table.insert(lines, w)
   end
   table.insert(lines, "")
