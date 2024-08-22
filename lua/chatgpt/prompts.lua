@@ -96,8 +96,8 @@ local finder = function(opts)
               end
 
               local response = table.concat(j:result(), "\n")
-              local lines = {}
-              for line in string.gmatch(response, "[^\n]+") do
+              local lines = Utils.split_string_by_line(response)
+              for line in lines do
                 local act, _prompt = string.match(line, '"(.*)","(.*)"')
                 if act ~= "act" and act ~= nil then
                   _prompt = string.gsub(_prompt, '""', '"')
