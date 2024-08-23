@@ -180,14 +180,7 @@ function Chat:_add(type, text, usage, idx)
   local nr_of_lines = 0
   for line in text:gmatch("([^\n]*\n?)") do
     nr_of_lines = nr_of_lines + 1
-    -- check if line ends with an newline and if so, remove it and add an empty line to lines
-    if line:sub(-1) == "\n" then
-      line = line:sub(1, -2)
-      table.insert(lines, line)
-      table.insert(lines, "")
-    else
-      table.insert(lines, line)
-    end
+    table.insert(lines, line)
   end
 
   table.insert(self.messages, {
@@ -239,14 +232,7 @@ function Chat:addAnswerPartial(text, state)
     local nr_of_lines = 0
     for line in text:gmatch("([^\n]*\n?)") do
       nr_of_lines = nr_of_lines + 1
-      -- check if line ends with an newline and if so, remove it and add an empty line to lines
-      if line:sub(-1) == "\n" then
-        line = line:sub(1, -2)
-        table.insert(lines, line)
-        table.insert(lines, "")
-      else
-        table.insert(lines, line)
-      end
+      table.insert(lines, line)
     end
 
     local end_line = start_line + nr_of_lines - 1
@@ -440,15 +426,8 @@ function Chat:renderLastMessage()
   local msg = self:getSelected()
 
   local lines = {}
-  for line in string.gmatch(msg.text, "[^\n]+") do
-    -- check if line ends with an newline and if so, remove it and add an empty line to lines
-    if line:sub(-1) == "\n" then
-      line = line:sub(1, -2)
-      table.insert(lines, line)
-      table.insert(lines, "")
-    else
-      table.insert(lines, line)
-    end
+  for w in string.gmatch(msg.text, "[^\r\n]+") do
+    table.insert(lines, w)
   end
   table.insert(lines, "")
   if msg.type == ANSWER then
