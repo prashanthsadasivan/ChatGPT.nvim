@@ -176,11 +176,10 @@ function Chat:_add(type, text, usage, idx)
     start_line = prev.end_line + (prev.type == ANSWER and 2 or 1)
   end
 
-  local lines = {}
   local nr_of_lines = 0
-  for line in string.gmatch(text, "[^\n]+") do
+  local lines = Utils.split_string_by_line(text)
+  for _ in pairs(lines) do
     nr_of_lines = nr_of_lines + 1
-    table.insert(lines, line)
   end
 
   table.insert(self.messages, {
@@ -228,11 +227,10 @@ function Chat:addAnswerPartial(text, state)
       usage = usage,
     })
 
-    local lines = {}
     local nr_of_lines = 0
-    for line in string.gmatch(text, "[^\n]*") do
+    local lines = Utils.split_string_by_line(text)
+    for _ in pairs(lines) do
       nr_of_lines = nr_of_lines + 1
-      table.insert(lines, line)
     end
 
     local end_line = start_line + nr_of_lines - 1
@@ -425,11 +423,11 @@ function Chat:renderLastMessage()
   self:stopSpinner()
   local msg = self:getSelected()
 
-  local lines = {}
-  for w in string.gmatch(msg.text, "[^\r\n]+") do
-    table.insert(lines, w)
+  local nr_of_lines = 0
+  local lines = Utils.split_string_by_line(msg.text)
+  for _ in pairs(lines) do
+    nr_of_lines = nr_of_lines + 1
   end
-  table.insert(lines, "")
   if msg.type == ANSWER then
     table.insert(lines, "")
   end

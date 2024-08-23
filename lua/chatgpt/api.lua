@@ -57,7 +57,8 @@ function Api.chat_completions(custom_params, cb, should_stop)
             return
           end
         end
-        for line in chunk:gmatch("[^\n]+") do
+        local lines = Utils.split_string_by_line(chunk)
+        for _, line in ipairs(lines) do
           local raw_json = string.gsub(line, "^data: ", "")
           if raw_json == "[DONE]" then
             cb(raw_chunks, "END")
