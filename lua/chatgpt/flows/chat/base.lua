@@ -281,18 +281,7 @@ function Chat:addAnswerPartial(text, state)
   end
 
   if state == "START" or state == "CONTINUE" then
-    local lines = {}
-    for line in text:gmatch("([^\n]*\n?)") do
-      nr_of_lines = nr_of_lines + 1
-      -- check if line ends with an newline and if so, remove it and add an empty line to lines
-      if line:sub(-1) == "\n" then
-        line = line:sub(1, -2)
-        table.insert(lines, line)
-        table.insert(lines, "")
-      else
-        table.insert(lines, line)
-      end
-    end
+    local lines = vim.split(text, "\n", {})
     local length = #lines
     local buffer = self.chat_window.bufnr
     local win = self.chat_window.winid
