@@ -267,7 +267,11 @@ function Chat:addAnswerPartial(text, state)
   end
 
   if state == "START" or state == "CONTINUE" then
-    local lines = vim.split(text, "\n", {})
+    local lines = {}
+    for line in text:gmatch("[^\n]*") do
+      table.insert(lines, line)
+    end
+
     local length = #lines
     local buffer = self.chat_window.bufnr
     local win = self.chat_window.winid
@@ -276,14 +280,18 @@ function Chat:addAnswerPartial(text, state)
       return
     end
 
+    local last_was_newline = false
     for i, line in ipairs(lines) do
       local currentLine = vim.api.nvim_buf_get_lines(buffer, -2, -1, false)[1]
       vim.api.nvim_buf_set_lines(buffer, -2, -1, false, { currentLine .. line })
 
       local last_line_num = vim.api.nvim_buf_line_count(buffer)
       Signs.set_for_lines(self.chat_window.bufnr, start_line, last_line_num - 1, "chat")
-      if i == length and i > 1 then
+      if (i ~= length or text[-1] == "\n") and line == "" and not last_was_newline then
+        last_was_newline = true
         vim.api.nvim_buf_set_lines(buffer, -1, -1, false, { "" })
+      else
+        last_was_newline = false
       end
       if self:is_buf_visiable() then
         vim.api.nvim_win_set_cursor(win, { last_line_num, 0 })
